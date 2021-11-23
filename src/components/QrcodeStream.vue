@@ -31,12 +31,10 @@
 <script>
 import { keepScanning } from "../misc/scanner.js";
 import Camera from "../misc/camera.js";
-import CommonAPI from "../mixins/CommonAPI.vue";
+import { BrowserMultiFormatReader, Exception } from '@zxing/library'
 
 export default {
   name: "qrcode-stream",
-
-  mixins: [CommonAPI],
 
   props: {
     camera: {
@@ -60,6 +58,7 @@ export default {
 
   data() {
     return {
+      codeReader: new BrowserMultiFormatReader(),
       cameraInstance: null,
       destroyed: false
     };
@@ -120,6 +119,7 @@ export default {
 
   mounted() {
     this.init();
+    this.start();
   },
 
   beforeDestroy() {
@@ -128,6 +128,19 @@ export default {
   },
 
   methods: {
+    start() {
+      this.codeReader.decodeFromVideoDevice(
+        this.camera,
+        this.$refs.video,
+        // eslint-disable-next-line no-unused-vars
+        (result, err) => {
+          if (result) {
+            this.$emit('decode', result.text)
+          }
+        },
+      )
+    },
+
     init() {
       const promise = (async () => {
         this.beforeResetCamera();
@@ -177,6 +190,7 @@ export default {
     beforeResetCamera() {
       if (this.cameraInstance !== null) {
         this.cameraInstance.stop();
+        this.codeReader.reset()
         this.cameraInstance = null;
       }
     },
