@@ -6,11 +6,11 @@
     "name": "Niklas Gruhn",
     "email": "niklas@gruhn.me"
   },
-  "repository": "github:gruhn/vue-qrcode-reader",
+  "repository": "github:KeniaCode/vue-qrcode-barcode-reader",
   "bugs": "https://github.com/gruhn/vue-qrcode-reader/issues",
   "homepage": "https://gruhn.github.io/vue-qrcode-reader",
-  "main": "dist/VueQrcodeReader.common.js",
-  "unpkg": "dist/VueQrcodeReader.umd.min.js",
+  "main": "dist/VueQrcodeBarcodeReader.common.js",
+  "unpkg": "dist/VueQrcodeBarcodeReader.umd.min.js",
   "keywords": [
     "vue",
     "vuejs",
