@@ -3,14 +3,14 @@ import { eventOn } from "callforth";
 
 const adaptOldFormat = detectedCodes => {
   if (detectedCodes.length > 0) {
-    const [ firstCode ] = detectedCodes;
+    const [firstCode] = detectedCodes;
 
     const [
       topLeftCorner,
       topRightCorner,
       bottomRightCorner,
       bottomLeftCorner
-    ] = firstCode.cornerPoints
+    ] = firstCode.cornerPoints;
 
     return {
       content: firstCode.rawValue,
@@ -26,15 +26,15 @@ const adaptOldFormat = detectedCodes => {
         bottomLeftFinderPattern: {}
       },
       imageData: null
-    }
+    };
   } else {
     return {
       content: null,
       location: null,
       imageData: null
-    }
+    };
   }
-}
+};
 
 /**
  * Continuously extracts frames from camera stream and tries to read
@@ -47,11 +47,11 @@ export const keepScanning = (videoElement, options) => {
 
   const processFrame = state => async timeNow => {
     if (videoElement.readyState > 1) {
-      const { lastScanned, contentBefore, locationBefore } = state
+      const { lastScanned, contentBefore, locationBefore } = state;
 
       if (timeNow - lastScanned >= minDelay) {
         const detectedCodes = await barcodeDetector.detect(videoElement);
-        const { content, location, imageData } = adaptOldFormat(detectedCodes)
+        const { content, location, imageData } = adaptOldFormat(detectedCodes);
 
         if (content !== null && content !== contentBefore) {
           detectHandler({ content, location, imageData });
@@ -61,13 +61,15 @@ export const keepScanning = (videoElement, options) => {
           locateHandler(detectedCodes);
         }
 
-        window.requestAnimationFrame(processFrame({
-          lastScanned: timeNow,
-          contentBefore: content ?? contentBefore,
-          locationBefore: location
-        }))
+        window.requestAnimationFrame(
+          processFrame({
+            lastScanned: timeNow,
+            contentBefore: content ?? contentBefore,
+            locationBefore: location
+          })
+        );
       } else {
-        window.requestAnimationFrame(processFrame(state))
+        window.requestAnimationFrame(processFrame(state));
       }
     }
   };
@@ -90,19 +92,19 @@ const imageElementFromUrl = async url => {
   await eventOn(image, "load");
 
   return image;
-}
+};
 
 export const processFile = async file => {
-  const barcodeDetector = new BarcodeDetector({ formats: ["qr_code"] })
-  const detectedCodes = await barcodeDetector.detect(file)
+  const barcodeDetector = new BarcodeDetector({ formats: ["qr_code"] });
+  const detectedCodes = await barcodeDetector.detect(file);
 
-  return adaptOldFormat(detectedCodes)
-}
+  return adaptOldFormat(detectedCodes);
+};
 
 export const processUrl = async url => {
-  const barcodeDetector = new BarcodeDetector({ formats: ["qr_code"] })
+  const barcodeDetector = new BarcodeDetector({ formats: ["qr_code"] });
   const image = await imageElementFromUrl(url);
-  const detectedCodes = await barcodeDetector.detect(image)
+  const detectedCodes = await barcodeDetector.detect(image);
 
-  return adaptOldFormat(detectedCodes)
-}
+  return adaptOldFormat(detectedCodes);
+};

@@ -186,7 +186,11 @@ export default {
       const video = this.$refs.video;
 
       if (canvas !== undefined) {
-        if (detectedCodes.length > 0 && this.track !== undefined && video !== undefined) {
+        if (
+          detectedCodes.length > 0 &&
+          this.track !== undefined &&
+          video !== undefined
+        ) {
           // The visually occupied area of the video element.
           // Because the component is responsive and fills the available space,
           // this can be more or less than the actual resolution of the camera.
@@ -219,38 +223,40 @@ export default {
               x: Math.floor(x * xScalar),
               y: Math.floor(y * yScalar)
             };
-          }
+          };
 
           const translate = ({ x, y }) => {
             return {
               x: Math.floor(x + xOffset),
               y: Math.floor(y + yOffset)
             };
-          }
+          };
 
           const adjustedCodes = detectedCodes.map(detectedCode => {
-            const { boundingBox, cornerPoints } = detectedCode
+            const { boundingBox, cornerPoints } = detectedCode;
 
-            const { x, y } = translate(scale({
-              x: boundingBox.x,
-              y: boundingBox.y
-            }))
+            const { x, y } = translate(
+              scale({
+                x: boundingBox.x,
+                y: boundingBox.y
+              })
+            );
             const { x: width, y: height } = scale({
               x: boundingBox.width,
               y: boundingBox.height
-            })
+            });
 
             return {
               ...detectedCode,
               cornerPoints: cornerPoints.map(point => translate(scale(point))),
               boundingBox: DOMRectReadOnly.fromRect({ x, y, width, height })
-            }
-          })
+            };
+          });
 
           canvas.width = video.offsetWidth;
           canvas.height = video.offsetHeight;
 
-          const ctx = canvas.getContext('2d');
+          const ctx = canvas.getContext("2d");
 
           this.track(adjustedCodes, ctx);
         } else {
@@ -261,7 +267,6 @@ export default {
 
     repaintTrackingLayer(video, canvas, location) {
       const ctx = canvas.getContext("2d");
-
 
       window.requestAnimationFrame(() => {
         canvas.width = displayWidth;
@@ -275,7 +280,6 @@ export default {
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
   }
 };
 </script>

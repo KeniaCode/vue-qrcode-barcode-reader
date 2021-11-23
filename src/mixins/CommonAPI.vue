@@ -1,10 +1,10 @@
 <script>
-import BarcodeDetector from "barcode-detector"
+import BarcodeDetector from "barcode-detector";
 
 export default {
   beforeMount() {
     // if (!('BarcodeDetector' in window)) {
-    window.BarcodeDetector = BarcodeDetector
+    window.BarcodeDetector = BarcodeDetector;
     // }
   },
 
