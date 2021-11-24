@@ -180,7 +180,11 @@ export default {
         this.onDetect(Promise.resolve(result));
       };
 
-
+      keepScanning(this.$refs.video, {
+        detectHandler,
+        locateHandler: this.onLocate,
+        minDelay: this.scanInterval
+      });
     },
 
     beforeResetCamera() {
